@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 160px auto;
+            padding: 20px;
+            border: 10px solid;
+            background: white;
+            border-radius: 8px;
+            animation: rgb-border 3s linear infinite;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes rgb-border {
+            0% {
+                border-color: rgb(255, 0, 0);
+            }
+            33% {
+                border-color: rgb(255, 255, 0);
+            }
+            66% {
+                border-color: rgb(0, 0, 255);
+            }
+            100% {
+                border-color: rgb(255, 0, 0);
+            }
+        }
+        
+        .question {
+            font-weight: 600;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+        
+        .timer {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .options {
+            list-style: none;
+            font-weight: 600;
+            padding: 0;
+        }
+        
+        .options li {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .options input {
+            margin-right: 10px;
+        }
+        
+        .submit-btn {
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #4caf50, #2196f3);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #2196f3, #4caf50);
+        }
+        
+        .result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="progress" id="progress">Question 1 of 10</div>
+        <div class="timer" id="timer">Time left: 25s</div>
+        <div id="quiz">
+            <div class="question">Question will appear here</div>
+            <ul class="options">
+                <li><input type="radio" name="option" value="0" id="option0"><label for="option0">Option 1</label></li>
+                <li><input type="radio" name="option" value="1" id="option1"><label for="option1">Option 2</label></li>
+                <li><input type="radio" name="option" value="2" id="option2"><label for="option2">Option 3</label></li>
+                <li><input type="radio" name="option" value="3" id="option3"><label for="option3">Option 4</label></li>
+            </ul>
+            <button class="submit-btn" onclick="submitAnswer()">Submit</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            // Add more questions here...
+
+            {
+                question: "Which of the following is a Python framework?",
+                options: ["Django", "Flask", "Both", "None"],
+                answer: "Both"
+            }, {
+                question: "What is the keyword used to define a class in Java?",
+                options: ["class", "Class", "define", "object"],
+                answer: "class"
+            }, {
+                question: "Which of the following is not a valid variable name in C++?",
+                options: ["_var", "var1", "1var", "var_name"],
+                answer: "1var"
+            }, {
+                question: "What does the len() function do in Python?",
+                options: ["Calculate length", "Find index", "Sort list", "None of the above"],
+                answer: 0
+            }, {
+                question: "Which is used to define a constant in C++?",
+                options: ["#define", "const", "both", "none"],
+                answer: 2
+            }, {
+                question: "What is the output of the following code: print(type([])) in Python?",
+                options: ["<class 'list'>", "<class 'dict'>", "<class 'tuple'>", "<class 'set'>"],
+                answer: "<class 'list'>"
+            }, {
+                question: "Which of the following is a valid comment in Java?",
+                options: ["// This is a comment", "# This is a comment", "/* This is a comment */", "Both 1 and 3"],
+                answer: "Both 1 and 3"
+            }, {
+                question: "What is the default value of a boolean variable in Java?",
+                options: ["true", "false", "0", "null"],
+                answer: "false"
+            }, {
+                question: "Which of the following is not a valid data type in C?",
+                options: ["int", "float", "string", "char"],
+                answer: "string"
+            }, {
+                question: "What is the correct way to create a function in Python?",
+                options: ["function myFunc() {}", "def myFunc():", "create myFunc() {}", "myFunc() => {}"],
+                answer: "def myFunc():"
+            }, {
+                question: "Which of the following is used to handle exceptions in Java?",
+                options: ["try-catch", "if-else", "switch-case", "for-loop"],
+                answer: "try-catch"
+            }, {
+                question: "What is the output of the following code: print(2 ** 3) in Python?",
+                options: ["6", "8", "9", "3"],
+                answer: "8"
+            }, {
+                question: "Which of the following is a feature of C++?",
+                options: ["Object-oriented", "Procedural", "Functional", "All of the above"],
+                answer: "All of the above"
+            }, {
+                question: "What is the size of an int in C?",
+                options: ["2 bytes", "4 bytes", "8 bytes", "Depends on the system"],
+                answer: "Depends on the system"
+            }, {
+                question: "Which keyword is used to inherit a class in Java?",
+                options: ["inherits", "extends", "implements", "super"],
+                answer: "extends"
+            }, {
+                question: "What is the correct syntax for a while loop in Python?",
+                options: ["while (x > y) {}", "while x > y:", "while (x > y):", "while x > y {}"],
+                answer: "while x > y:"
+            }, {
+                question: "Which of the following is a built-in data type in Python?",
+                options: ["list", "dict", "set", "All of the above"],
+                answer: "All of the above"
+            }, {
+                question: "What is the purpose of the 'break' statement in C?",
+                options: ["To exit a loop", "To skip an iteration", "To terminate a program", "None of the above"],
+                answer: "To exit a loop"
+            }, {
+                question: "Which of the following is not a valid constructor in Java?",
+                options: ["public MyClass()", "MyClass public()", "MyClass(int a)", "MyClass(String s)"],
+                answer: "MyClass public()"
+            }, {
+                question: "What is the output of the following code: print('Hello' + 'World') in Python?",
+                options: ["Hello World", "HelloWorld", "Hello+World", "Error"],
+                answer: "HelloWorld"
+            },
+        ];
+
+        let currentQuestion = 0;
+        let answeredQuestions = 0;
+        const totalQuestions = questions.length;
+        let score = 0;
+        let timer;
+        let timeLeft = 25;
+
+        function updateProgress() {
+            document.getElementById("progress").textContent = `Question ${answeredQuestions + 1} of ${totalQuestions}`;
+        }
+
+        function loadQuestion() {
+            updateProgress();
+            const q = questions[currentQuestion];
+            document.querySelector(".question").textContent = q.question;
+            const options = document.querySelectorAll(".options li");
+            options.forEach((option, index) => {
+                const label = option.querySelector("label");
+                label.textContent = q.options[index];
+                option.className = ""; // Reset class (wrong or correct)
+            });
+            document.querySelectorAll("input[name='option']").forEach((input) => {
+                input.checked = false; // Reset selected option
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 25; // Reset the timer
+            const timerElement = document.getElementById("timer");
+            timerElement.textContent = `Time left: ${timeLeft}s`;
+
+            if (timer) clearInterval(timer); // Clear any existing timer
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Time left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    submitAnswer(); // Auto-submit if time runs out
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const timerEl = document.getElementById("timer");
+            interval = setInterval(() => {
+                timer--;
+                timerEl.textContent = `Time Left: ${timer}s`;
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    currentQuestion++;
+                    if (currentQuestion < questions.length) loadQuestion();
+                    else showResult();
+                }
+            }, 1000);
+        }
+
+        function submitAnswer() {
+            const selectedOption = document.querySelector("input[name='option']:checked");
+            if (!selectedOption) {
+                alert("Please select an option!");
+                return;
+            }
+
+            const answer = parseInt(selectedOption.value);
+            if (answer === questions[currentQuestion].answer) {
+                score++;
+            }
+
+            answeredQuestions++;
+            clearInterval(timer); // Stop the timer
+
+            if (answeredQuestions < totalQuestions) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("result").textContent = `You scored ${score} out of ${totalQuestions}`;
+        }
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+
+</html>
